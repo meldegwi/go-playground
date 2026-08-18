@@ -1,3 +1,5 @@
+name: HealthCheck
+
 on:
   push:
     branches: [main]

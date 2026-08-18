@@ -1,0 +1,112 @@
+name: HealthCheck
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  GO_VERSION: '1.26.x'
+
+jobs:
+  pr-compliance:
+    name: Commit & PR Title Conventions
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify PR Title
+        uses: amannn/action-semantic-pull-request@v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify All Commit Messages
+        uses: wagoid/commitlint-github-action@v6
+
+  general-hygiene:
+    name: Typos
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Check for typos
+        uses: crate-ci/typos@v1.49.0        
+
+  build-and-test:
+    name: Lint, Build & Test All Modules
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@v1.7.0
+
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.12.2
+          skip-cache: false
+          install-only: true
+
+      - name: Run Module Checks
+        shell: bash
+        run: |
+          set -uo pipefail
+          FAILED=0
+          MODULE_DIRS=$(find . -name "go.mod" -not -path "*/vendor/*" -not -path "*/.git/*" -exec dirname {} \;)
+
+          for dir in $MODULE_DIRS; do
+            echo "::group::Checking module: $dir"
+            (
+            set -e
+            cd "$dir"
+
+            echo "=> Running go mod tidy check..."
+            go mod tidy
+            if ! git diff --exit-code -- go.mod go.sum > /dev/null 2>&1; then
+              echo "::error::go.mod or go.sum is not tidy in $dir. Please run 'go mod tidy' and commit the changes."
+              exit 1
+            fi
+
+            echo "=> Running govulncheck..."
+            govulncheck ./...
+
+            echo "=> Running golangci-lint..."
+            golangci-lint run ./...
+
+            echo "=> Building..."
+            go build ./...
+
+            echo "=> Testing..."
+            go test -race -shuffle=on -cover -count=1 ./...
+            ) || FAILED=1
+            echo "::endgroup::"
+          done
+          if [ "$FAILED" -ne 0 ]; then
+            echo "::error::One or more modules failed thier check. Please review the logs above."
+            exit 1
+          fi

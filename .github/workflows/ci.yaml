@@ -12,9 +12,10 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
 
 env:
-  GO_VERSION: '1.26.4'
+  GO_VERSION: '1.26.x'
 
 jobs:
   pr-compliance:
@@ -74,12 +75,14 @@ jobs:
       - name: Run Module Checks
         shell: bash
         run: |
-          set -euo pipefail
-
+          set -uo pipefail
+          FAILED=0
           MODULE_DIRS=$(find . -name "go.mod" -not -path "*/vendor/*" -not -path "*/.git/*" -exec dirname {} \;)
 
           for dir in $MODULE_DIRS; do
             echo "::group::Checking module: $dir"
+            (
+            set -e
             cd "$dir"
 
             echo "=> Running go mod tidy check..."
@@ -100,7 +103,10 @@ jobs:
 
             echo "=> Testing..."
             go test -race -shuffle=on -cover -count=1 ./...
-
-            cd - > /dev/null
+            ) || FAILED=1
             echo "::endgroup::"
           done
+          if [ "$FAILED" -ne 0 ]; then
+            echo "::error::One or more modules failed thier check. Please review the logs above."
+            exit 1
+          fi

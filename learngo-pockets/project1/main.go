@@ -16,6 +16,6 @@ func greet(l language) string {
 	case "fr":
 		return "Bonjour le monde!"
 	default:
-		return "Unsupported language :( Please try again"
+		return "Unsupported language :( Please try again."
 	}
 }

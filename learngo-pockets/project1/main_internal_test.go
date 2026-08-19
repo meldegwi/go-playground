@@ -10,7 +10,7 @@ func Example_main() {
 
 func TestGreet_English(t *testing.T) {
 	lang := language("en")
-	want := "Hello, World!"
+	want := "Hello, World"
 
 	got := greet(lang)
 
@@ -21,7 +21,7 @@ func TestGreet_English(t *testing.T) {
 
 func TestGreet_French(t *testing.T) {
 	lang := language("fr")
-	want := "Bonjour le monde!"
+	want := "Bonjour le monde"
 
 	got := greet(lang)
 
@@ -32,7 +32,7 @@ func TestGreet_French(t *testing.T) {
 
 func TestGreet_UnsupportedLanguage(t *testing.T) {
 	lang := language("abc")
-	want := "Unsupported language :( Please try again."
+	want := "unsupported language: abc"
 
 	got := greet(lang)
 

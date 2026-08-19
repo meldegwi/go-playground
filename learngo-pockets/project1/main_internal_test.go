@@ -5,38 +5,41 @@ import "testing"
 func Example_main() {
 	main()
 	// Output:
-	// Hello, World!
+	// Hello, World
 }
 
-func TestGreet_English(t *testing.T) {
-	lang := language("en")
-	want := "Hello, World"
-
-	got := greet(lang)
-
-	if got != want {
-		t.Errorf("expected: %q, got: %q", want, got)
+func TestGreet(t *testing.T) {
+	type testCases struct {
+		lang language
+		want string
 	}
-}
 
-func TestGreet_French(t *testing.T) {
-	lang := language("fr")
-	want := "Bonjour le monde"
-
-	got := greet(lang)
-
-	if got != want {
-		t.Errorf("expected: %q, got: %q", want, got)
+	tests := map[string]testCases{
+		"English": {
+			"en",
+			"Hello, World",
+		},
+		"French": {
+			"fr",
+			"Bonjour le monde",
+		},
+		"Arabic": {
+			"ar",
+			"اهلا بالعالم",
+		},
+		"Unsupported Language": {
+			"abc",
+			`unsupported language: "abc"`,
+		},
 	}
-}
 
-func TestGreet_UnsupportedLanguage(t *testing.T) {
-	lang := language("abc")
-	want := "unsupported language: abc"
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			got := greet(tc.lang)
 
-	got := greet(lang)
-
-	if got != want {
-		t.Errorf("expected: %q, got: %q", want, got)
+			if got != tc.want {
+				t.Errorf("expected: %q, got: %q", tc.want, got)
+			}
+		})
 	}
 }

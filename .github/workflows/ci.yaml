@@ -20,7 +20,7 @@ env:
 
 jobs:
     general-hygiene:
-    name: Typos
+    name: Typos Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -31,7 +31,7 @@ jobs:
         uses: crate-ci/typos@v1.49.0        
 
   build-and-test:
-    name: Lint, Build & Test All Modules
+    name: Lint, Build & Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   pr-compliance:
-    name: Commit & PR Conventions
+    name: PR & Commit Conventions
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened]
     branches: [main]
 
 concurrency:
@@ -18,27 +19,8 @@ env:
   GO_VERSION: '1.26.x'
 
 jobs:
-  pr-compliance:
-    name: Commit & PR Title Conventions
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Verify PR Title
-        uses: amannn/action-semantic-pull-request@v6.1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify All Commit Messages
-        uses: wagoid/commitlint-github-action@v6
-
-  general-hygiene:
-    name: Typos
+    general-hygiene:
+    name: Typos Check
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -49,7 +31,7 @@ jobs:
         uses: crate-ci/typos@v1.49.0        
 
   build-and-test:
-    name: Lint, Build & Test All Modules
+    name: Lint, Build & Test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

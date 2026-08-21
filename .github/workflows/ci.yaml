@@ -1,4 +1,4 @@
-name: HealthCheck
+name: health
 
 on:
   push:
@@ -20,7 +20,7 @@ env:
 
 jobs:
   general-hygiene:
-    name: Typos Check
+    name: typos-check
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -31,7 +31,7 @@ jobs:
         uses: crate-ci/typos@v1.49.0
 
   build-and-test:
-    name: Lint, Build & Test
+    name: lint-build-test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

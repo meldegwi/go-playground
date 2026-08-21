@@ -20,6 +20,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Verify PR Title
+        uses: amannn/action-semantic-pull-request@v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify All Commit Messages
+        uses: wagoid/commitlint-github-action@v6
+      
       - name: Verify Mandatory PR Checkbox
         uses: actions/github-script@v7
         with:
@@ -31,10 +39,4 @@ jobs:
               core.setFailed("Required checkbox 'Important: must be checked' is not checked in the PR description.");
             }
 
-      - name: Verify PR Title
-        uses: amannn/action-semantic-pull-request@v6.1.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify All Commit Messages
-        uses: wagoid/commitlint-github-action@v6

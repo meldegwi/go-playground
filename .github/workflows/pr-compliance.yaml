@@ -1,4 +1,4 @@
-name: PR Compliance
+name: compliance
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   pr-compliance:
-    name: PR & Commit Conventions
+    name: conventions
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -27,7 +27,12 @@ jobs:
 
       - name: Verify All Commit Messages
         uses: wagoid/commitlint-github-action@v6
-      
+
+  pr-checkbox:
+    name: completeness-checkbox
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
       - name: Verify Mandatory PR Checkbox
         uses: actions/github-script@v7
         with:
@@ -38,5 +43,3 @@ jobs:
             if (!isChecked) {
               core.setFailed("Required checkbox 'Important: must be checked' is not checked in the PR description.");
             }
-
-

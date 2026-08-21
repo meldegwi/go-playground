@@ -1,0 +1,40 @@
+name: PR Compliance
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pr-compliance:
+    name: Commit & PR Conventions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify Mandatory PR Checkbox
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || "";
+            const isChecked = /-\s*\[[xX]\]\s*This box must be checked before merging/i.test(body);
+            
+            if (!isChecked) {
+              core.setFailed("Required checkbox 'Important: must be checked' is not checked in the PR description.");
+            }
+
+      - name: Verify PR Title
+        uses: amannn/action-semantic-pull-request@v6.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify All Commit Messages
+        uses: wagoid/commitlint-github-action@v6

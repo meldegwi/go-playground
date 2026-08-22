@@ -17,9 +17,9 @@ type Book struct {
 	Title  string `json:"title"`
 }
 
-// loadbookworms reads the file and returns the list of bookworms,
+// loadBookworms reads the file and returns the list of bookworms,
 // and their 	beloved books, found therein
-func loadbookworms(filePath string) ([]Bookworm, error) {
+func loadBookworms(filePath string) ([]Bookworm, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

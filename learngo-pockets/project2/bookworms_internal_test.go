@@ -110,23 +110,11 @@ func TestFindCommonBooks(t *testing.T) {
 			},
 			want: []CommonBook{
 				{
-					Book:    handmaidsTale,
-					Holders: []string{"Fadi", "Peggy"},
-				},
-				{
-					Book:    theBellJar,
-					Holders: []string{"Fadi", "Clara"},
-				},
-				{
-					Book:    mrsDalloway,
-					Holders: []string{"Fadi", "Clara"},
-				},
-				{
 					Book:    nineteen84,
 					Holders: []string{"Fadi", "Samir"},
 				},
 				{
-					Book:    oryxAndCrake,
+					Book:    braveNewWorld,
 					Holders: []string{"Peggy", "Samir"},
 				},
 				{
@@ -134,8 +122,20 @@ func TestFindCommonBooks(t *testing.T) {
 					Holders: []string{"Peggy", "Clara"},
 				},
 				{
-					Book:    braveNewWorld,
+					Book:    mrsDalloway,
+					Holders: []string{"Fadi", "Clara"},
+				},
+				{
+					Book:    oryxAndCrake,
 					Holders: []string{"Peggy", "Samir"},
+				},
+				{
+					Book:    theBellJar,
+					Holders: []string{"Fadi", "Clara"},
+				},
+				{
+					Book:    handmaidsTale,
+					Holders: []string{"Fadi", "Peggy"},
 				},
 			},
 		},

@@ -12,5 +12,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%s\n", bookworms)
+	// fmt.Printf("%s\n", bookworms)
+
+	commonbooks := findCommonBooks(bookworms)
+	fmt.Printf("%s\n", commonbooks)
 }

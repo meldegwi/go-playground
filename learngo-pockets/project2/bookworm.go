@@ -36,3 +36,29 @@ func loadBookworms(filePath string) ([]Bookworm, error) {
 
 	return bookworms, nil
 }
+
+// findCommonBooks return struct contains books that are on more than
+// one bookworm shelf along with its owners.
+func findCommonBooks(bookworms []Bookworm) map[Book][]string {
+	res := make(map[Book][]string)
+
+	if len(bookworms) < 2 {
+		return res
+	}
+
+	cbmap := make(map[Book][]string)
+	for i := range bookworms {
+		bw := &bookworms[i]
+		for _, book := range bw.Books {
+			cbmap[book] = append(cbmap[book], bw.Name)
+		}
+	}
+
+	for book, elem := range cbmap {
+		if len(elem) > 1 {
+			res[book] = elem
+		}
+	}
+
+	return res
+}

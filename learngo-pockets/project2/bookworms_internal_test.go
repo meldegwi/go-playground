@@ -81,3 +81,95 @@ func TestLoadBookworms(t *testing.T) {
 			})
 	}
 }
+
+func TestFindCommonBooks(t *testing.T) {
+	tests := []struct {
+		name      string
+		bookworms []Bookworm
+		want      map[Book][]string
+	}{
+		{
+			name: "there is common books",
+			bookworms: []Bookworm{
+				{
+					Name:  "Fadi",
+					Books: []Book{handmaidsTale, theBellJar, mrsDalloway, nineteen84},
+				},
+				{
+					Name:  "Peggy",
+					Books: []Book{oryxAndCrake, handmaidsTale, janeEyre, toTheLighthouse, braveNewWorld},
+				},
+				{
+					Name:  "Samir",
+					Books: []Book{nineteen84, braveNewWorld, oryxAndCrake, fahrenheit451},
+				},
+				{
+					Name:  "Clara",
+					Books: []Book{theBellJar, janeEyre, mrsDalloway, wutheringHeights},
+				},
+			},
+			want: map[Book][]string{
+				handmaidsTale: {"Fadi", "Peggy"},
+				theBellJar:    {"Fadi", "Clara"},
+				mrsDalloway:   {"Fadi", "Clara"},
+				nineteen84:    {"Fadi", "Samir"},
+				oryxAndCrake:  {"Peggy", "Samir"},
+				janeEyre:      {"Peggy", "Clara"},
+				braveNewWorld: {"Peggy", "Samir"},
+			},
+		},
+		{
+			name: "all bookworms have the same book",
+			bookworms: []Bookworm{
+				{
+					Name:  "Fadi",
+					Books: []Book{theBellJar},
+				},
+				{
+					Name:  "Peggy",
+					Books: []Book{theBellJar},
+				},
+				{
+					Name:  "Samir",
+					Books: []Book{theBellJar},
+				},
+				{
+					Name:  "Clara",
+					Books: []Book{theBellJar},
+				},
+			},
+			want: map[Book][]string{
+				theBellJar: {"Fadi", "Peggy", "Samir", "Clara"},
+			},
+		},
+		{
+			name: "no common books",
+			bookworms: []Bookworm{
+				{
+					Name:  "Samir",
+					Books: []Book{nineteen84, braveNewWorld, oryxAndCrake, fahrenheit451},
+				},
+				{
+					Name:  "Clara",
+					Books: []Book{theBellJar, janeEyre, mrsDalloway, wutheringHeights},
+				},
+			},
+			want: map[Book][]string{},
+		},
+		{
+			name:      "no bookworms provided",
+			bookworms: []Bookworm{},
+			want:      map[Book][]string{},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name,
+			func(t *testing.T) {
+				got := findCommonBooks(tc.bookworms)
+				if ok := reflect.DeepEqual(got, tc.want); !ok {
+					t.Fatalf("expected: %#v, got: %#v", tc.want, got)
+				}
+			})
+	}
+}

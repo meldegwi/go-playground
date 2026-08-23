@@ -1,8 +1,10 @@
 package main
 
 import (
+	"cmp"
 	"encoding/json"
 	"os"
+	"slices"
 )
 
 // A Bookworm contains the list of books on a bookworm's shelf.
@@ -43,8 +45,8 @@ func loadBookworms(filePath string) ([]Bookworm, error) {
 	return bookworms, nil
 }
 
-// findCommonBooks return struct contains books that are on more than
-// one bookworm shelf along with its owners.
+// findCommonBooks return array of contains all common book(s),
+// along with its holders sorted by book title.
 func findCommonBooks(bookworms []Bookworm) []CommonBook {
 	if len(bookworms) < 2 {
 		return nil
@@ -69,6 +71,12 @@ func findCommonBooks(bookworms []Bookworm) []CommonBook {
 				})
 		}
 	}
+
+	slices.SortFunc(res, func(a, b CommonBook) int {
+		return cmp.Or(
+			cmp.Compare(a.Book.Title, b.Book.Title),
+		)
+	})
 
 	return res
 }

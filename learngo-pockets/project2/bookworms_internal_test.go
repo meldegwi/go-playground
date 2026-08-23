@@ -86,7 +86,7 @@ func TestFindCommonBooks(t *testing.T) {
 	tests := []struct {
 		name      string
 		bookworms []Bookworm
-		want      map[Book][]string
+		want      []CommonBook
 	}{
 		{
 			name: "there is common books",
@@ -108,14 +108,35 @@ func TestFindCommonBooks(t *testing.T) {
 					Books: []Book{theBellJar, janeEyre, mrsDalloway, wutheringHeights},
 				},
 			},
-			want: map[Book][]string{
-				handmaidsTale: {"Fadi", "Peggy"},
-				theBellJar:    {"Fadi", "Clara"},
-				mrsDalloway:   {"Fadi", "Clara"},
-				nineteen84:    {"Fadi", "Samir"},
-				oryxAndCrake:  {"Peggy", "Samir"},
-				janeEyre:      {"Peggy", "Clara"},
-				braveNewWorld: {"Peggy", "Samir"},
+			want: []CommonBook{
+				{
+					Book:    handmaidsTale,
+					Holders: []string{"Fadi", "Peggy"},
+				},
+				{
+					Book:    theBellJar,
+					Holders: []string{"Fadi", "Clara"},
+				},
+				{
+					Book:    mrsDalloway,
+					Holders: []string{"Fadi", "Clara"},
+				},
+				{
+					Book:    nineteen84,
+					Holders: []string{"Fadi", "Samir"},
+				},
+				{
+					Book:    oryxAndCrake,
+					Holders: []string{"Peggy", "Samir"},
+				},
+				{
+					Book:    janeEyre,
+					Holders: []string{"Peggy", "Clara"},
+				},
+				{
+					Book:    braveNewWorld,
+					Holders: []string{"Peggy", "Samir"},
+				},
 			},
 		},
 		{
@@ -138,8 +159,11 @@ func TestFindCommonBooks(t *testing.T) {
 					Books: []Book{theBellJar},
 				},
 			},
-			want: map[Book][]string{
-				theBellJar: {"Fadi", "Peggy", "Samir", "Clara"},
+			want: []CommonBook{
+				{
+					Book:    theBellJar,
+					Holders: []string{"Fadi", "Peggy", "Samir", "Clara"},
+				},
 			},
 		},
 		{
@@ -154,12 +178,12 @@ func TestFindCommonBooks(t *testing.T) {
 					Books: []Book{theBellJar, janeEyre, mrsDalloway, wutheringHeights},
 				},
 			},
-			want: map[Book][]string{},
+			want: nil,
 		},
 		{
 			name:      "no bookworms provided",
 			bookworms: []Bookworm{},
-			want:      map[Book][]string{},
+			want:      nil,
 		},
 	}
 

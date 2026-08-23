@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Fadi",
+    "books": [
+      {
+        "author": "Margaret Atwood",
+        "title": "The Handmaid's Tale"
+      },
+      {
+        "author": "Sylvia Plath",
+        "title": "The Bell Jar"
+      },
+      {
+        "author": "Virginia Woolf",
+        "title": "Mrs Dalloway"
+      },
+      {
+        "author": "George Orwell",
+        "title": "1984"
+      }
+    ]
+  },
+  {
+    "name": "Peggy",
+    "books": [
+      {
+        "author": "Margaret Atwood",
+        "title": "Oryx and Crake"
+      },
+      {
+        "author": "Margaret Atwood",
+        "title": "The Handmaid's Tale"
+      },
+      {
+        "author": "Charlotte Brontë",
+        "title": "Jane Eyre"
+      },
+      {
+        "author": "Virginia Woolf",
+        "title": "To the Lighthouse"
+      },
+      {
+        "author": "Aldous Huxley",
+        "title": "Brave New World"
+      }
+    ]
+  },
+  {
+    "name": "Samir",
+    "books": [
+      {
+        "author": "George Orwell",
+        "title": "1984"
+      },
+      {
+        "author": "Aldous Huxley",
+        "title": "Brave New World"
+      },
+      {
+        "author": "Margaret Atwood",
+        "title": "Oryx and Crake"
+      },
+      {
+        "author": "Ray Bradbury",
+        "title": "Fahrenheit 451"
+      }
+    ]
+  },
+  {
+    "name": "Clara",
+    "books": [
+      {
+        "author": "Sylvia Plath",
+        "title": "The Bell Jar"
+      },
+      {
+        "author": "Charlotte Brontë",
+        "title": "Jane Eyre"
+      },
+      {
+        "author": "Virginia Woolf",
+        "title": "Mrs Dalloway"
+      },
+      {
+        "author": "Emily Brontë",
+        "title": "Wuthering Heights"
+      }
+    ]
+  }
+]

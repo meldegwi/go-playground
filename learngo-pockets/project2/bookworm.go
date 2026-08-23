@@ -17,6 +17,11 @@ type Book struct {
 	Title  string `json:"title"`
 }
 
+type CommonBook struct {
+	Book    Book
+	Holders []string
+}
+
 // loadBookworms reads the file and returns the list of bookworms,
 // and their 	beloved books, found therein
 func loadBookworms(filePath string) ([]Bookworm, error) {
@@ -39,24 +44,28 @@ func loadBookworms(filePath string) ([]Bookworm, error) {
 
 // findCommonBooks return struct contains books that are on more than
 // one bookworm shelf along with its owners.
-func findCommonBooks(bookworms []Bookworm) map[Book][]string {
-	res := make(map[Book][]string)
-
+func findCommonBooks(bookworms []Bookworm) []CommonBook {
 	if len(bookworms) < 2 {
-		return res
+		return nil
 	}
 
 	cbmap := make(map[Book][]string)
 	for i := range bookworms {
 		bw := &bookworms[i]
 		for _, book := range bw.Books {
-			cbmap[book] = append(cbmap[book], bw.Name)
+			cbmap[book] = append(cbmap[book],
+				bw.Name)
 		}
 	}
 
-	for book, elem := range cbmap {
-		if len(elem) > 1 {
-			res[book] = elem
+	var res []CommonBook
+	for book, holders := range cbmap {
+		if len(holders) > 1 {
+			res = append(res,
+				CommonBook{
+					Book:    book,
+					Holders: holders,
+				})
 		}
 	}
 

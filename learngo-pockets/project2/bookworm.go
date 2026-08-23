@@ -17,6 +17,7 @@ type Book struct {
 	Title  string `json:"title"`
 }
 
+// A CommonBook describes which bookworms have books in common.
 type CommonBook struct {
 	Book    Book
 	Holders []string

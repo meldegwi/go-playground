@@ -18,7 +18,7 @@ func main() {
 
 func displayCommonBooks(bookworms []Bookworm) {
 	cBooks := findCommonBooks(bookworms)
-
+	fmt.Printf("Between all bookworms, those are the common books:\n\n")
 	for _, cbook := range cBooks {
 		fmt.Println("-", cbook.Book.Title, "by", cbook.Book.Author)
 		fmt.Printf("Owned by: %s\n\n", strings.Join(cbook.Holders, ", "))

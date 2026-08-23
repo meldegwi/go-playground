@@ -12,8 +12,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// fmt.Printf("%s\n", bookworms)
+	displayCommonBooks(bookworms)
+}
 
-	commonbooks := findCommonBooks(bookworms)
-	fmt.Printf("%s\n", commonbooks)
+func displayCommonBooks(bookworms []Bookworm) {
+	cBooks := findCommonBooks(bookworms)
+
+	for _, cbook := range cBooks {
+		fmt.Println("-", cbook.Book.Title, "by", cbook.Book.Author)
+		fmt.Printf("owned by: %s\n\n", cbook.Holders)
+	}
 }

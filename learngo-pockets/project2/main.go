@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,6 +21,6 @@ func displayCommonBooks(bookworms []Bookworm) {
 
 	for _, cbook := range cBooks {
 		fmt.Println("-", cbook.Book.Title, "by", cbook.Book.Author)
-		fmt.Printf("owned by: %s\n\n", cbook.Holders)
+		fmt.Printf("Owned by: %s\n\n", strings.Join(cbook.Holders, ", "))
 	}
 }

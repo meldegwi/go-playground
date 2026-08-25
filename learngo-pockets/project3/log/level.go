@@ -20,3 +20,5 @@ const (
 	// used in major error that are unrecoverable.
 	LevelFatal
 )
+
+// TODO: add colors to printed console logs.

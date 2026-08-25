@@ -21,6 +21,7 @@ const (
 	LevelFatal
 )
 
+// adds prefix indicating its level to the log
 const (
 	pfxDEBUG = "[DEBUG]"
 	pfxINFO  = "[INFO]"
@@ -29,4 +30,12 @@ const (
 	pfxFATAL = "[FATAL]"
 )
 
-// TODO: add colors to printed console logs.
+// adds color to the log
+const (
+	cReset  = "\033[0m"  // no color - rest of the log
+	cGray   = "\033[90m" // Debug & timestamp
+	cCyan   = "\033[36m" // info
+	cYellow = "\033[33m" // warn
+	cRed    = "\033[31m" // error
+	cPurple = "\033[35m" // fatal
+)

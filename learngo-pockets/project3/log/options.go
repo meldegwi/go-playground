@@ -11,3 +11,10 @@ func WithOutput(output io.Writer) Option {
 		lgr.output = output
 	}
 }
+
+// WithColors adds ANSI color sequence to the log.
+func WithColors() Option {
+	return func(lgr *Logger) {
+		lgr.colorful = true
+	}
+}

@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 )
 
 // Logger is used to log information.
 type Logger struct {
 	threshold Level
 	output    io.Writer
+	colorful  bool
 }
 
 // New returns news you a logger, ready to log at the required threshold.
 // the default output is Stdout
 func New(threshold Level, opts ...Option) *Logger {
-	lgr := &Logger{threshold: threshold, output: os.Stdout}
+	lgr := &Logger{threshold: threshold, output: os.Stdout, colorful: false}
 	for _, configFunc := range opts {
 		configFunc(lgr)
 	}
@@ -48,7 +50,7 @@ func (l *Logger) Fatalf(format string, args ...any) {
 	os.Exit(1)
 }
 
-func (l *Logger) logf(level Level, prefix, format string, args ...any) {
+func (l *Logger) logf(level Level, lvlPfx, format string, args ...any) {
 	if l.threshold > level {
 		return
 	}
@@ -57,6 +59,32 @@ func (l *Logger) logf(level Level, prefix, format string, args ...any) {
 		l.output = os.Stdout
 	}
 
+	ts := time.Now().Format("2006-01-02 15:04:05")
+
+	var prefix string
+	if l.colorful {
+		prefix = addColor(level, ts, lvlPfx)
+	} else {
+		prefix = fmt.Sprintf("[%v] %s", ts, lvlPfx)
+	}
+
 	msg := fmt.Sprintf(format, args...)
 	_, _ = fmt.Fprintf(l.output, "%s %s\n", prefix, msg)
+}
+
+func addColor(lvl Level, ts, lvlPfx string) string {
+	var lvlColor string
+	switch lvl {
+	case LevelInfo:
+		lvlColor = cCyan
+	case LevelWarn:
+		lvlColor = cYellow
+	case LevelError:
+		lvlColor = cRed
+	case LevelFatal:
+		lvlColor = cPurple
+	default:
+		lvlColor = cGray
+	}
+	return fmt.Sprintf("%s[%s]%s %s%s%s", cGray, ts, cReset, lvlColor, lvlPfx, cReset)
 }

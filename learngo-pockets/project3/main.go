@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	lgr := log.New(log.LevelInfo, log.WithOutput(os.Stdout))
+	lgr := log.New(log.LevelInfo, log.WithOutput(os.Stdout), log.WithColors())
 
 	lgr.Infof("A little copying is better than a little dependency.")
 	lgr.Errorf("Error are values, documentation is for %s", "users")

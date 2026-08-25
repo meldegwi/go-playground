@@ -9,7 +9,7 @@ Sharing the logger is the responsibility of the caller.
 
 The logger can be called to log messages on three levels:
   - Debug: mostly used to debug code, follow step by step processes
-  - Info: valuble messages providing insights to milestones of a process
+  - Info: valuable messages providing insights to milestones of a process
   - Warn: warning messages about change in a process that got recovered or similar
   - Error: error message to understand what went wrong.
   - Fatal: message about error that paniced a process/system and is unrecoverable

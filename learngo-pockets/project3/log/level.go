@@ -22,11 +22,11 @@ const (
 )
 
 const (
-	DEBUG = "[DEBUG]"
-	INFO  = "[INFO]"
-	WARN  = "[WARN]"
-	ERROR = "[ERROR]"
-	FATAL = "[FATAL]"
+	pfxDEBUG = "[DEBUG]"
+	pfxINFO  = "[INFO]"
+	pfxWARN  = "[WARN]"
+	pfxERROR = "[ERROR]"
+	pfxFATAL = "[FATAL]"
 )
 
 // TODO: add colors to printed console logs.

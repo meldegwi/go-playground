@@ -23,27 +23,27 @@ func New(threshold Level, output io.Writer) *Logger {
 
 // Debugf formats and prints a message if a log level is debug or beyond.
 func (l *Logger) Debugf(format string, args ...any) {
-	l.logf(LevelDebug, DEBUG, format, args...)
+	l.logf(LevelDebug, pfxDEBUG, format, args...)
 }
 
 // Infof formats and prints a message if a log level is info or beyond.
 func (l *Logger) Infof(format string, args ...any) {
-	l.logf(LevelInfo, INFO, format, args...)
+	l.logf(LevelInfo, pfxINFO, format, args...)
 }
 
 // Warnf formats and prints a message if a log level is warn or beyond.
 func (l *Logger) Warnf(format string, args ...any) {
-	l.logf(LevelWarn, WARN, format, args...)
+	l.logf(LevelWarn, pfxWARN, format, args...)
 }
 
 // Errorf formats and prints a message if a log level is error or beyond.
 func (l *Logger) Errorf(format string, args ...any) {
-	l.logf(LevelError, ERROR, format, args...)
+	l.logf(LevelError, pfxERROR, format, args...)
 }
 
 // Fatalf formats and prints a message if a log level is fatal.
 func (l *Logger) Fatalf(format string, args ...any) {
-	l.logf(LevelFatal, FATAL, format, args...)
+	l.logf(LevelFatal, pfxFATAL, format, args...)
 	os.Exit(1)
 }
 

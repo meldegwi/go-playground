@@ -12,6 +12,6 @@ The logger can be called to log messages on three levels:
   - Info: valuable messages providing insights to milestones of a process
   - Warn: warning messages about change in a process that got recovered or similar
   - Error: error message to understand what went wrong.
-  - Fatal: message about error that paniced a process/system and is unrecoverable
+  - Fatal: message about error that panicked a process/system and is unrecoverable
 */
 package log

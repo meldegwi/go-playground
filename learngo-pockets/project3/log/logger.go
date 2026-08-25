@@ -11,13 +11,14 @@ import (
 type Logger struct {
 	threshold Level
 	output    io.Writer
+	msgMxSize int
 	colorful  bool
 }
 
 // New returns news you a logger, ready to log at the required threshold.
 // the default output is Stdout
 func New(threshold Level, opts ...Option) *Logger {
-	lgr := &Logger{threshold: threshold, output: os.Stdout, colorful: false}
+	lgr := &Logger{threshold: threshold, output: os.Stdout, msgMxSize: 1000, colorful: false}
 	for _, configFunc := range opts {
 		configFunc(lgr)
 	}
@@ -69,6 +70,11 @@ func (l *Logger) logf(level Level, lvlPfx, format string, args ...any) {
 	}
 
 	msg := fmt.Sprintf(format, args...)
+
+	if len(msg) > l.msgMxSize {
+		msg = msg[:len(msg)-l.msgMxSize]
+	}
+
 	_, _ = fmt.Fprintf(l.output, "%s %s\n", prefix, msg)
 }
 

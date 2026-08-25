@@ -18,3 +18,9 @@ func WithColors() Option {
 		lgr.colorful = true
 	}
 }
+
+func WithMsgMxSize(msgMxSize int) Option {
+	return func(lgr *Logger) {
+		lgr.msgMxSize = msgMxSize
+	}
+}

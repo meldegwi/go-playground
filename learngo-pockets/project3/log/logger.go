@@ -28,7 +28,7 @@ func (l *Logger) Debugf(format string, args ...any) {
 	}
 
 	if l.threshold <= LevelDebug {
-		_, _ = fmt.Fprintf(l.output, "[DEBUG] "+format, args...)
+		l.logf(format, DEBUG, args...)
 	}
 }
 
@@ -39,7 +39,7 @@ func (l *Logger) Infof(format string, args ...any) {
 	}
 
 	if l.threshold <= LevelInfo {
-		_, _ = fmt.Fprintf(l.output, "[INFO] "+format, args...)
+		l.logf(format, INFO, args...)
 	}
 }
 
@@ -50,7 +50,7 @@ func (l *Logger) Warnf(format string, args ...any) {
 	}
 
 	if l.threshold <= LevelWarn {
-		_, _ = fmt.Fprintf(l.output, "[WARN] "+format, args...)
+		l.logf(format, WARN, args...)
 	}
 }
 
@@ -61,7 +61,7 @@ func (l *Logger) Errorf(format string, args ...any) {
 	}
 
 	if l.threshold <= LevelError {
-		_, _ = fmt.Fprintf(l.output, "[ERROR] "+format, args...)
+		l.logf(format, ERROR, args...)
 	}
 }
 
@@ -72,6 +72,10 @@ func (l *Logger) Fatalf(format string, args ...any) {
 	}
 
 	if l.threshold <= LevelFatal {
-		_, _ = fmt.Fprintf(l.output, "[FATAL] "+format, args...)
+		l.logf(format, FATAL, args...)
 	}
+}
+
+func (l *Logger) logf(format string, level string, args ...any) {
+	_, _ = fmt.Fprintf(l.output, level+" "+format+"\n", args...)
 }

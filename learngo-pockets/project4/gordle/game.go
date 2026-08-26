@@ -9,6 +9,8 @@ import (
 
 const solutionLength = 5
 
+var errInvalidWordLen = fmt.Errorf("invalid guess, word doesn't have the same number of characters as the solution")
+
 // Game holds all the information we need to play a game of gordle.
 type Game struct {
 	reader *bufio.Reader
@@ -40,12 +42,18 @@ func (g *Game) ask() []rune {
 		}
 
 		guess := []rune(string(playerInput))
-		if len(guess) != solutionLength {
-			fmt.Fprintf(os.Stderr,
-				"Oh oh... Your guess is %d-character but it must be a %d-character word. Please try again.\n",
-				len(guess), solutionLength)
-		} else {
-			return guess
+		err = g.validateGuess(guess)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Your attempt is invalid with Gordle solution: %s.\n", err.Error())
 		}
 	}
+}
+
+func (g *Game) validateGuess(guess []rune) error {
+	if len(guess) != solutionLength {
+		return fmt.Errorf(
+			"expected %d, got %d %w",
+			solutionLength, len(guess), errInvalidWordLen)
+	}
+	return nil
 }

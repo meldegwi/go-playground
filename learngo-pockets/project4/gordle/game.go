@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-const solutionLength = 5
-
 var errInvalidWordLen = fmt.Errorf("invalid guess, word doesn't have the same number of characters as the solution")
 
 // Game holds all the information we need to play a game of gordle.
@@ -50,7 +48,7 @@ func (g *Game) Play() {
 }
 
 func (g *Game) ask() []rune {
-	fmt.Printf("Enter a %d-character guess:\n", solutionLength)
+	fmt.Printf("Enter a %d-character guess:\n", len(g.solution))
 
 	for {
 		playerInput, _, err := g.reader.ReadLine()
@@ -70,10 +68,10 @@ func (g *Game) ask() []rune {
 }
 
 func (g *Game) validateGuess(guess []rune) error {
-	if len(guess) != solutionLength {
+	if len(guess) != len(g.solution) {
 		return fmt.Errorf(
 			"expected %d, got %d %w",
-			solutionLength, len(guess), errInvalidWordLen)
+			len(g.solution), len(guess), errInvalidWordLen)
 	}
 	return nil
 }

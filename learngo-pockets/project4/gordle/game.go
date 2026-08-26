@@ -35,13 +35,13 @@ func (g *Game) Play() {
 		guess := g.ask()
 
 		if slices.Equal(guess, g.solution) {
+			fmt.Printf("\n%s\n\n", giveHint(guess, g.solution))
 			fmt.Printf("🎉 You won! You found it in %d guess(es)! The word was: %s.\n",
 				curAttempt, string(g.solution))
 			return
 		} else {
-			fmt.Printf("That was not it 😞.\n\n")
-			fmt.Printf("Umm... I see that you're struggling... Here is a hint...\n\n")
-			fmt.Printf("%s\n\n", giveHint(guess, g.solution))
+			fmt.Printf("\nThat was not it 😞.\n\n")
+			fmt.Printf("Umm... I see that you're struggling, here is a hint: %s\n\n", giveHint(guess, g.solution))
 		}
 	}
 
@@ -50,7 +50,7 @@ func (g *Game) Play() {
 }
 
 func (g *Game) ask() []rune {
-	fmt.Printf("Enter a %d-character guess:\n", len(g.solution))
+	fmt.Printf("Enter a %d-character guess: ", len(g.solution))
 
 	for {
 		playerInput, _, err := g.reader.ReadLine()

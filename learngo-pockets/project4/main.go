@@ -16,12 +16,14 @@ func main() {
 
 	corpus, err := gordle.ReadCorpus(filePath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err.Error())
+		fmt.Fprintf(os.Stderr, "Unable to read corpus: %s", err)
+		return
 	}
 
 	g, err := gordle.New(os.Stdin, corpus, 5)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err.Error())
+		fmt.Fprintf(os.Stderr, "unable to start the game: %s", err)
+		return
 	}
 
 	g.Play()

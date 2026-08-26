@@ -18,14 +18,19 @@ type Game struct {
 	maxAttempts int
 }
 
-func New(pInput io.Reader, sol string, mxAtmpt int) *Game {
+func New(pInput io.Reader, corpus []string, mxAtmpt int) (*Game, error) {
+	if len(corpus) == 0 {
+		return nil, ErrCorpusIsEmpty
+	}
+
 	g := &Game{
-		reader:      bufio.NewReader(pInput),
-		solution:    splitToUpperCaseCharacters(sol),
+		reader: bufio.NewReader(pInput),
+		solution: []rune(
+			strings.ToUpper(PickWord(corpus))),
 		maxAttempts: mxAtmpt,
 	}
 
-	return g
+	return g, nil
 }
 
 func (g *Game) Play() {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -14,12 +15,16 @@ var errInvalidWordLen = fmt.Errorf("invalid guess, word doesn't have the same nu
 
 // Game holds all the information we need to play a game of gordle.
 type Game struct {
-	reader *bufio.Reader
+	reader      *bufio.Reader
+	solution    []rune
+	maxAttempts int
 }
 
-func New(pInput io.Reader) *Game {
+func New(pInput io.Reader, sol string, mxAtmpt int) *Game {
 	g := &Game{
-		reader: bufio.NewReader(pInput),
+		reader:      bufio.NewReader(pInput),
+		solution:    splitToUpperCaseCharacters(sol),
+		maxAttempts: mxAtmpt,
 	}
 
 	return g
@@ -27,9 +32,21 @@ func New(pInput io.Reader) *Game {
 
 func (g *Game) Play() {
 	fmt.Println("Welcome to Gordle!")
-	guess := g.ask()
 
-	fmt.Printf("Your guess is: %s\n", string(guess))
+	for curAttempt := 1; curAttempt <= g.maxAttempts; curAttempt++ {
+		guess := g.ask()
+
+		if slices.Equal(guess, g.solution) {
+			fmt.Printf("🎉 You won! You found it in %d guess(es)! The word was: %s.\n",
+				curAttempt, string(g.solution))
+			return
+		} else {
+			fmt.Printf("That was not it 😞. Try again...\n")
+		}
+	}
+
+	fmt.Printf("😞 You've lost! The solution was: %s. \n",
+		string(g.solution))
 }
 
 func (g *Game) ask() []rune {

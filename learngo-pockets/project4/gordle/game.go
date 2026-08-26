@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 const solutionLength = 5
@@ -41,7 +42,7 @@ func (g *Game) ask() []rune {
 				err.Error())
 		}
 
-		guess := []rune(string(playerInput))
+		guess := splitToUpperCaseCharacters(string(playerInput))
 		err = g.validateGuess(guess)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Your attempt is invalid with Gordle solution: %s.\n", err.Error())
@@ -58,4 +59,8 @@ func (g *Game) validateGuess(guess []rune) error {
 			solutionLength, len(guess), errInvalidWordLen)
 	}
 	return nil
+}
+
+func splitToUpperCaseCharacters(input string) []rune {
+	return []rune(strings.ToUpper(input))
 }

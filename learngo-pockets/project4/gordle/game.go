@@ -41,7 +41,7 @@ func (g *Game) Play() {
 		} else {
 			fmt.Printf("That was not it 😞.\n\n")
 			fmt.Printf("Umm... I see that you're struggling... Here is a hint...\n\n")
-			fmt.Printf("%s\n\n", g.giveHint(guess))
+			fmt.Printf("%s\n\n", giveHint(guess, g.solution))
 		}
 	}
 
@@ -82,22 +82,22 @@ func splitToUpperCaseCharacters(input string) []rune {
 	return []rune(strings.ToUpper(input))
 }
 
-func (g *Game) giveHint(guess []rune) string {
-	if len(guess) != len(g.solution) {
+func giveHint(guess, solution []rune) feedback {
+	if len(guess) != len(solution) {
 		fmt.Fprintf(os.Stderr,
 			"Internal error! Guess and solution have different lengths: %d vs %d",
-			len(guess), len(g.solution))
-		return ""
+			len(guess), len(solution))
+		return nil
 	}
 
 	cm := map[rune]int{}
-	for _, run := range g.solution {
+	for _, run := range solution {
 		cm[run]++
 	}
 
 	fb := make(feedback, len(guess))
 	for i, run := range guess {
-		if run == g.solution[i] {
+		if run == solution[i] {
 			fb[i] = correctPos
 			cm[run]--
 		} else {
@@ -116,5 +116,5 @@ func (g *Game) giveHint(guess []rune) string {
 		}
 	}
 
-	return fb.String()
+	return fb
 }

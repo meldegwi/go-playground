@@ -24,8 +24,9 @@ func New(pInput io.Reader) *Game {
 
 func (g *Game) Play() {
 	fmt.Println("Welcome to Gordle!")
+	guess := g.ask()
 
-	fmt.Printf("Enter a guess:\n")
+	fmt.Printf("Your guess is: %s\n", string(guess))
 }
 
 func (g *Game) ask() []rune {

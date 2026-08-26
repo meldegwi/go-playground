@@ -16,7 +16,7 @@ func TestGameAsk(t *testing.T) {
 		{
 			name:  "5-chars-english",
 			input: "Hello",
-			want:  []rune("Hello"),
+			want:  []rune("HELLO"),
 		},
 		{
 			name:  "5-chars-arabic",
@@ -37,7 +37,7 @@ func TestGameAsk(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			g := New(strings.NewReader(tc.input))
+			g := New(strings.NewReader(tc.input), string(tc.want), 0)
 			got := g.ask()
 			if !slices.Equal(got, tc.want) {
 				t.Errorf("got: %v, want: %v", string(got), string(tc.want))
@@ -81,7 +81,7 @@ func TestValidateGuess(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			g := New(nil)
+			g := New(nil, string("Hello"), 0)
 			got := g.validateGuess(tc.guess)
 			if !errors.Is(got, tc.want) {
 				t.Errorf("word %c, got %q, want %q", tc.guess, got, tc.want)

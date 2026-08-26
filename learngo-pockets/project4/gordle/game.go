@@ -45,6 +45,8 @@ func (g *Game) ask() []rune {
 		err = g.validateGuess(guess)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Your attempt is invalid with Gordle solution: %s.\n", err.Error())
+		} else {
+			return guess
 		}
 	}
 }

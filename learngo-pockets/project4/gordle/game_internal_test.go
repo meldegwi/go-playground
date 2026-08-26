@@ -89,3 +89,84 @@ func TestValidateGuess(t *testing.T) {
 		})
 	}
 }
+
+func TestGiveFeedback(t *testing.T) {
+	tests := []struct {
+		name           string
+		guess          string
+		solution       string
+		wantedFeedback feedback
+	}{
+		{
+			name:     "correct guess",
+			guess:    "Hello",
+			solution: "Hello",
+			wantedFeedback: feedback{
+				correctPos,
+				correctPos,
+				correctPos,
+				correctPos,
+				correctPos,
+			},
+		},
+		{
+			name:     "mixed feedback",
+			guess:    "World",
+			solution: "Hello",
+			wantedFeedback: feedback{
+				absentChar,
+				wrongPos,
+				absentChar,
+				correctPos,
+				absentChar,
+			},
+		},
+		{
+			name:     "correct positions and absent chars",
+			guess:    "Hxllo",
+			solution: "Hello",
+			wantedFeedback: feedback{
+				correctPos,
+				absentChar,
+				correctPos,
+				correctPos,
+				correctPos,
+			},
+		},
+		{
+			name:     "all chars correct but wrong positions",
+			guess:    "olleH",
+			solution: "Hello",
+			wantedFeedback: feedback{
+				wrongPos,
+				wrongPos,
+				correctPos,
+				wrongPos,
+				wrongPos,
+			},
+		},
+		{
+			name:     "mixed feedback",
+			guess:    "Holol",
+			solution: "Hello",
+			wantedFeedback: feedback{
+				correctPos,
+				wrongPos,
+				correctPos,
+				absentChar,
+				wrongPos,
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			gotFeedback := giveHint([]rune(tc.guess), []rune(tc.solution))
+
+			if !tc.wantedFeedback.Equal(gotFeedback) {
+				t.Errorf("guess: %q, got the wrong feedback, wanted %v, got %v",
+					tc.guess, tc.wantedFeedback, gotFeedback)
+			}
+		})
+	}
+}

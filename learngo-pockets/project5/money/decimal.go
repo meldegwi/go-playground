@@ -55,3 +55,10 @@ func ParseDecimal(decimal string) (Decimal, error) {
 	perc := byte(len(fracPart))
 	return Decimal{subunits: su, percision: perc}, nil
 }
+
+func (d *Decimal) Simplify() {
+	for d.subunits%10 == 0 {
+		d.percision--
+		d.subunits /= 10
+	}
+}

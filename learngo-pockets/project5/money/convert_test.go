@@ -21,10 +21,11 @@ func TestConvert(t *testing.T) {
 			validate: func(t *testing.T, got money.Amount, err error) {
 				if err != nil {
 					t.Errorf("expected no error, got %s", err)
-					expected := money.Amount{}
-					if !reflect.DeepEqual(expected, got) {
-						t.Errorf("amounts doesn't match. expected %v, got %v", expected, got)
-					}
+				}
+				expected := mustParseAmount(t, "69.96", "EUR")
+
+				if !reflect.DeepEqual(expected, got) {
+					t.Errorf("amounts doesn't match. expected %v, got %v", expected, got)
 				}
 			},
 		},

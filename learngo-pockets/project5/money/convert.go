@@ -1,8 +1,9 @@
 package money
 
 func Convert(amount Amount, to Currency) (Amount, error) {
-	// implement me
-	return Amount{}, nil
+	xr := ExchangeRate(Decimal{subunits: 2, percision: 0})
+	convertedValue := applyExchangeRate(amount, to, xr)
+	return convertedValue, nil
 }
 
 type ExchangeRate Decimal

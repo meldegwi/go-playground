@@ -2,7 +2,12 @@ package money
 
 func Convert(amount Amount, to Currency) (Amount, error) {
 	xr := ExchangeRate(Decimal{subunits: 2, percision: 0})
+
 	convertedValue := applyExchangeRate(amount, to, xr)
+	if err := convertedValue.validate(); err != nil {
+		return Amount{}, nil
+	}
+
 	return convertedValue, nil
 }
 

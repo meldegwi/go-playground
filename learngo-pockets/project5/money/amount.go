@@ -23,3 +23,14 @@ func NewAmount(quantity Decimal, currency Currency) (Amount, error) {
 		currency: currency,
 	}, nil
 }
+
+func (a *Amount) validate() error {
+	switch {
+	case a.quantity.subunits > maxDecimal:
+		return ErrTooLarge
+	case a.quantity.percision > a.currency.percision:
+		return fmt.Errorf("%w: too percise", ErrIncompatibleDeciCurr)
+	}
+
+	return nil
+}

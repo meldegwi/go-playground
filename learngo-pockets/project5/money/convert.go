@@ -17,7 +17,7 @@ func applyExchangeRate(a Amount, target Currency, xr ExchangeRate) Amount {
 	case converted.percision > target.percision:
 		converted.subunits = converted.subunits / pow10(converted.percision-target.percision)
 	case converted.percision < target.percision:
-		converted.subunits = converted.subunits * pow10(converted.percision-target.percision)
+		converted.subunits = converted.subunits * pow10(target.percision-converted.percision)
 	}
 
 	converted.percision = target.percision

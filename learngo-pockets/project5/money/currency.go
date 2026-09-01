@@ -12,13 +12,13 @@ type Currency struct {
 	percision byte
 }
 
-func Parse(code string) (Currency, error) {
+func ParseCurrency(code string) (Currency, error) {
 	if len(code) != 3 {
 		return Currency{}, ErrInvalidCurrencyCode
 	}
 
 	for _, r := range code {
-		if !unicode.IsLetter(r) && !unicode.IsUpper(r) {
+		if !unicode.IsLetter(r) || !unicode.IsUpper(r) {
 			return Currency{}, ErrInvalidCurrencyCode
 		}
 	}

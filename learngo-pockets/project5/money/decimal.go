@@ -57,11 +57,29 @@ func ParseDecimal(decimal string) (Decimal, error) {
 	return Decimal{subunits: su, percision: perc}, nil
 }
 
+// Simplify is removing any tailing zeros from your money.
+// However, you should use it carefully as it remove entire amounts where they are dividable by 10
+// e.g. 10.00 USD will get simplified to 00.00
 func (d *Decimal) Simplify() {
 	for d.subunits%10 == 0 {
 		d.percision--
 		d.subunits /= 10
 	}
+}
+
+func (d *Decimal) String() string {
+	if d.percision == 0 {
+		return fmt.Sprintf("%d", d.subunits)
+	}
+
+	centsPerUnits := pow10(d.percision)
+	frac := d.subunits % centsPerUnits
+	integer := d.subunits / centsPerUnits
+
+	decimalFormat := "%d.%0" +
+		strconv.Itoa(int(d.percision)) + "d"
+
+	return fmt.Sprintf(decimalFormat, integer, frac)
 }
 
 func pow10(pow byte) int64 {

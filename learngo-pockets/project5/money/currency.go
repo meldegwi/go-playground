@@ -40,3 +40,7 @@ func ParseCurrency(code string) (Currency, error) {
 		percision: perc,
 	}, nil
 }
+
+func (c Currency) String() string {
+	return c.code
+}

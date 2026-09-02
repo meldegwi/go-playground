@@ -1,7 +1,7 @@
 package money
 
 func Convert(amount Amount, to Currency) (Amount, error) {
-	xr := ExchangeRate(Decimal{subunits: 2, percision: 0})
+	xr := ExchangeRate(Decimal{subunits: 200, percision: 2})
 
 	convertedValue := applyExchangeRate(amount, to, xr)
 	if err := convertedValue.validate(); err != nil {
@@ -40,7 +40,7 @@ func multiply(d Decimal, xr ExchangeRate) (Decimal, error) {
 		percision: d.percision + xr.percision,
 	}
 
-	dec.Simplify()
+	// dec.Simplify()
 
 	return dec, nil
 }

@@ -14,8 +14,8 @@ type envelope struct {
 }
 
 type currencyRate struct {
-	Currency string  `xml:"currency, attr"`
-	Rate     float64 `xml:"rate, attr"`
+	Currency string  `xml:"currency,attr"`
+	Rate     float64 `xml:"rate,attr"`
 }
 
 const baseCurrencyCode = "EUR"
@@ -44,12 +44,12 @@ func (e envelope) exchangeRate(source, target string) (money.ExchangeRate, error
 
 	sourceFactor, ok := rates[source]
 	if !ok {
-		return money.ExchangeRate{}, fmt.Errorf("failed to find the source currency", source)
+		return money.ExchangeRate{}, fmt.Errorf("failed to find the source %s currency", source)
 	}
 
 	targetFactor, ok := rates[target]
 	if !ok {
-		return money.ExchangeRate{}, fmt.Errorf("failed to find the target currency", source)
+		return money.ExchangeRate{}, fmt.Errorf("failed to find the target %s currency", source)
 	}
 
 	res := targetFactor.Divide(sourceFactor)
@@ -63,12 +63,12 @@ func readRateFromResponse(source, target string, respBody io.Reader) (money.Exch
 	var ecbMessage envelope
 	err := decoder.Decode(&ecbMessage)
 	if err != nil {
-		return money.ExchangeRate{}, fmt.Errorf("%w: %s", ErrUnexpectedFormat, err)
+		return money.ExchangeRate{}, fmt.Errorf("%w: %s", err, ErrUnexpectedFormat)
 	}
 
 	rate, err := ecbMessage.exchangeRate(source, target)
 	if err != nil {
-		return money.ExchangeRate{}, fmt.Errorf("%w: %s", ErrExchangeRateNotFound, err)
+		return money.ExchangeRate{}, fmt.Errorf("%w: %s", err, ErrExchangeRateNotFound)
 	}
 
 	return rate, nil

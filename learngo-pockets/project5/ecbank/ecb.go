@@ -8,7 +8,9 @@ import (
 )
 
 // Client can call the bank to retrive exchange rate.
-type Client struct{}
+type Client struct {
+	url string
+}
 
 const (
 	ErrCallingServer        = ecbankError("error calling server")
@@ -27,9 +29,13 @@ const (
 // FetchExchangeRate fetches the Exchange rate of the day and returns it.
 func (c *Client) FetchExchangeRate(source, target money.Currency) (money.ExchangeRate, error) {
 	const path = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
-	resp, err := http.Get(path)
+	if c.url == "" {
+		c.url = path
+	}
+
+	resp, err := http.Get(c.url)
 	if err != nil {
-		return money.ExchangeRate{}, fmt.Errorf("%w: %s", ErrCallingServer, err.Error())
+		return money.ExchangeRate{}, fmt.Errorf("%w: %s", err, ErrCallingServer)
 	}
 
 	defer resp.Body.Close()
@@ -53,11 +59,11 @@ func checkStatusCode(statusCode int) error {
 	case statusCode == http.StatusOK:
 		return nil
 	case httpStatusClass(statusCode) == clientErrorClass:
-		return fmt.Errorf("%w: %d", ErrClientSide, statusCode)
+		return fmt.Errorf("%s: %d", ErrClientSide, statusCode)
 	case httpStatusClass(statusCode) == serverErrorClass:
-		return fmt.Errorf("%w: %d", ErrServerSide, statusCode)
+		return fmt.Errorf("%s: %d", ErrServerSide, statusCode)
 	default:
-		return fmt.Errorf("%w: %d", ErrUnknownStatusCode, statusCode)
+		return fmt.Errorf("%s: %d", ErrUnknownStatusCode, statusCode)
 	}
 }
 

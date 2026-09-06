@@ -82,6 +82,19 @@ func (d *Decimal) String() string {
 	return fmt.Sprintf(decimalFormat, integer, frac)
 }
 
+func (d *Decimal) Devide(dec Decimal) Decimal {
+	res := float64(d.subunits) / float64(dec.subunits)
+	var pow byte
+	if d.percision >= dec.percision {
+		pow = byte(d.percision)
+	} else {
+		pow = byte(dec.percision)
+	}
+
+	subuns := int64(res * float64(pow10(pow)))
+	return Decimal{subunits: subuns, percision: d.percision}
+}
+
 func pow10(pow byte) int64 {
 	switch pow {
 	case 0:

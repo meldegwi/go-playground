@@ -126,3 +126,29 @@ func TestParseDecimal(t *testing.T) {
 		})
 	}
 }
+
+func TestDevideDecimal(t *testing.T) {
+	tests := []struct {
+		name string
+		dec1 Decimal
+		dec2 Decimal
+		want Decimal
+	}{
+		{
+			name: "normal calculation",
+			dec1: Decimal{subunits: 95460, percision: 4},
+			dec2: Decimal{subunits: 12382, percision: 4},
+			want: Decimal{subunits: 77095, percision: 4},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.dec1.Devide(tc.dec2)
+
+			if got != tc.want {
+				t.Errorf("results mismatch, got %v, want %v", got.String(), tc.want.String())
+			}
+		})
+	}
+}

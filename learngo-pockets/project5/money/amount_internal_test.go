@@ -36,7 +36,7 @@ func TestNewAmount(t *testing.T) {
 			name:     "quantity less precise than currency",
 			quantity: Decimal{123456, 2},
 			currency: Currency{"USD", 3},
-			want:     Amount{quantity: Decimal{123456, 3}, currency: Currency{"USD", 3}},
+			want:     Amount{quantity: Decimal{1234560, 3}, currency: Currency{"USD", 3}},
 		},
 		{
 			name:     "zero precision currency",
@@ -48,13 +48,13 @@ func TestNewAmount(t *testing.T) {
 			name:     "zero precision quantity with precise currency",
 			quantity: Decimal{1234, 0},
 			currency: Currency{"KWD", 3},
-			want:     Amount{quantity: Decimal{1234, 3}, currency: Currency{"KWD", 3}},
+			want:     Amount{quantity: Decimal{1234000, 3}, currency: Currency{"KWD", 3}},
 		},
 		{
 			name:     "one precision with two precision currency",
 			quantity: Decimal{12345, 1},
 			currency: Currency{"EGP", 2},
-			want:     Amount{quantity: Decimal{12345, 2}, currency: Currency{"EGP", 2}},
+			want:     Amount{quantity: Decimal{123450, 2}, currency: Currency{"EGP", 2}},
 		},
 	}
 

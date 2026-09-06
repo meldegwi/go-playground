@@ -44,3 +44,10 @@ func multiply(d Decimal, xr ExchangeRate) (Decimal, error) {
 
 	return dec, nil
 }
+
+func (xr ExchangeRate) Divide(xRate ExchangeRate) ExchangeRate {
+	dec1 := Decimal(xr)
+	dec2 := Decimal(xRate)
+	res := dec1.Devide(dec2)
+	return ExchangeRate(res)
+}

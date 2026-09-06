@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"moneyconverter/ecbank"
 	"moneyconverter/money"
 )
 
@@ -44,7 +45,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	convertedAmount, err := money.Convert(amount, toCurrency)
+	rates := &ecbank.Client{}
+
+	convertedAmount, err := money.Convert(amount, toCurrency, rates)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 		os.Exit(1)

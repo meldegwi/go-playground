@@ -1,9 +1,14 @@
 package money
 
-func Convert(amount Amount, to Currency) (Amount, error) {
-	xr := ExchangeRate(Decimal{subunits: 200, percision: 2})
+import "fmt"
 
-	convertedValue := applyExchangeRate(amount, to, xr)
+func Convert(amount Amount, to Currency, rates exchangeRates) (Amount, error) {
+	r, err := rates.FetchExchangeRate(amount.currency, to)
+	if err != nil {
+		return Amount{}, fmt.Errorf("cannot get rate: %w", err)
+	}
+
+	convertedValue := applyExchangeRate(amount, to, r)
 	if err := convertedValue.validate(); err != nil {
 		return Amount{}, nil
 	}

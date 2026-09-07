@@ -1,0 +1,58 @@
+package money
+
+import "fmt"
+
+func Convert(amount Amount, to Currency, rates exchangeRates) (Amount, error) {
+	r, err := rates.FetchExchangeRate(amount.currency, to)
+	if err != nil {
+		return Amount{}, fmt.Errorf("cannot get rate: %w", err)
+	}
+
+	convertedValue := applyExchangeRate(amount, to, r)
+	if err := convertedValue.validate(); err != nil {
+		return Amount{}, nil
+	}
+
+	return convertedValue, nil
+}
+
+type ExchangeRate Decimal
+
+func applyExchangeRate(a Amount, target Currency, xr ExchangeRate) Amount {
+	converted, err := multiply(a.quantity, xr)
+	if err != nil {
+		return Amount{}
+	}
+
+	switch {
+	case converted.percision > target.percision:
+		converted.subunits = converted.subunits / pow10(converted.percision-target.percision)
+	case converted.percision < target.percision:
+		converted.subunits = converted.subunits * pow10(target.percision-converted.percision)
+	}
+
+	converted.percision = target.percision
+
+	return Amount{
+		quantity: converted,
+		currency: target,
+	}
+}
+
+func multiply(d Decimal, xr ExchangeRate) (Decimal, error) {
+	dec := Decimal{
+		subunits:  d.subunits * xr.subunits,
+		percision: d.percision + xr.percision,
+	}
+
+	// dec.Simplify()
+
+	return dec, nil
+}
+
+func (xr ExchangeRate) Divide(xRate ExchangeRate) ExchangeRate {
+	dec1 := Decimal(xr)
+	dec2 := Decimal(xRate)
+	res := dec1.Devide(dec2)
+	return ExchangeRate(res)
+}

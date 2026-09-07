@@ -17,7 +17,7 @@ func TestParseDecimal(t *testing.T) {
 			decimal: "1.23",
 			expected: Decimal{
 				subunits:  123,
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -26,7 +26,7 @@ func TestParseDecimal(t *testing.T) {
 			decimal: "1.52",
 			expected: Decimal{
 				subunits:  152,
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -41,7 +41,7 @@ func TestParseDecimal(t *testing.T) {
 			decimal: "1.50",
 			expected: Decimal{
 				subunits:  150,
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -50,7 +50,7 @@ func TestParseDecimal(t *testing.T) {
 			decimal: "0.52",
 			expected: Decimal{
 				subunits:  52,
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -59,7 +59,7 @@ func TestParseDecimal(t *testing.T) {
 			decimal: "10.00",
 			expected: Decimal{
 				subunits:  1000,
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -136,15 +136,15 @@ func TestDevideDecimal(t *testing.T) {
 	}{
 		{
 			name: "normal calculation",
-			dec1: Decimal{subunits: 95460, percision: 4},
-			dec2: Decimal{subunits: 12382, percision: 4},
-			want: Decimal{subunits: 77095, percision: 4},
+			dec1: Decimal{subunits: 95460, precision: 4},
+			dec2: Decimal{subunits: 12382, precision: 4},
+			want: Decimal{subunits: 77095, precision: 4},
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := tc.dec1.Devide(tc.dec2)
+			got := tc.dec1.Divide(tc.dec2)
 
 			if got != tc.want {
 				t.Errorf("results mismatch, got %v, want %v", got.String(), tc.want.String())

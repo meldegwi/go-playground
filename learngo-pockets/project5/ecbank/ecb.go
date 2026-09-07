@@ -7,7 +7,7 @@ import (
 	"moneyconverter/money"
 )
 
-// Client can call the bank to retrive exchange rate.
+// Client can call the bank to retrieve exchange rate.
 type Client struct {
 	url string
 }

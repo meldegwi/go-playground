@@ -16,17 +16,17 @@ const (
 
 const maxDecimal = 1e12
 
-// Decimal is responsible for representing a floating point number with fixed percision.
+// Decimal is responsible for representing a floating point number with fixed precision.
 // example:
-// 1.52 = 152 * 10^(-2) whill be stored as {152, 2}
+// 1.52 = 152 * 10^(-2) will be stored as {152, 2}
 type Decimal struct {
 	subunits  int64
-	percision byte
+	precision byte
 }
 
 // ParseDecimal converts a string to its decimal representation.
-// It assumes there is only one decimal seperator,
-// and that seperator is '.'(full stop character).
+// It assumes there is only one decimal separator,
+// and that separator is '.'(full stop character).
 func ParseDecimal(decimal string) (Decimal, error) {
 	intPart, fracPart, ok := strings.Cut(decimal, ".")
 	if !ok {
@@ -54,7 +54,7 @@ func ParseDecimal(decimal string) (Decimal, error) {
 	}
 
 	perc := byte(len(fracPart))
-	return Decimal{subunits: su, percision: perc}, nil
+	return Decimal{subunits: su, precision: perc}, nil
 }
 
 // Simplify is removing any tailing zeros from your money.
@@ -62,37 +62,37 @@ func ParseDecimal(decimal string) (Decimal, error) {
 // e.g. 10.00 USD will get simplified to 00.00
 func (d *Decimal) Simplify() {
 	for d.subunits%10 == 0 {
-		d.percision--
+		d.precision--
 		d.subunits /= 10
 	}
 }
 
 func (d *Decimal) String() string {
-	if d.percision == 0 {
+	if d.precision == 0 {
 		return fmt.Sprintf("%d", d.subunits)
 	}
 
-	centsPerUnits := pow10(d.percision)
+	centsPerUnits := pow10(d.precision)
 	frac := d.subunits % centsPerUnits
 	integer := d.subunits / centsPerUnits
 
 	decimalFormat := "%d.%0" +
-		strconv.Itoa(int(d.percision)) + "d"
+		strconv.Itoa(int(d.precision)) + "d"
 
 	return fmt.Sprintf(decimalFormat, integer, frac)
 }
 
-func (d *Decimal) Devide(dec Decimal) Decimal {
+func (d *Decimal) Divide(dec Decimal) Decimal {
 	res := float64(d.subunits) / float64(dec.subunits)
 	var pow byte
-	if d.percision >= dec.percision {
-		pow = byte(d.percision)
+	if d.precision >= dec.precision {
+		pow = byte(d.precision)
 	} else {
-		pow = byte(dec.percision)
+		pow = byte(dec.precision)
 	}
 
 	subuns := int64(res * float64(pow10(pow)))
-	return Decimal{subunits: subuns, percision: d.percision}
+	return Decimal{subunits: subuns, precision: d.precision}
 }
 
 func pow10(pow byte) int64 {

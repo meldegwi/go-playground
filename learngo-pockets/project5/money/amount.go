@@ -13,16 +13,16 @@ type Amount struct {
 
 func NewAmount(quantity Decimal, currency Currency) (Amount, error) {
 	switch {
-	case quantity.percision > currency.percision:
-		return Amount{}, fmt.Errorf("%w: too percise",
+	case quantity.precision > currency.precision:
+		return Amount{}, fmt.Errorf("%w: too precise",
 			ErrIncompatibleDeciCurr)
 
-	case quantity.percision < currency.percision:
+	case quantity.precision < currency.precision:
 		quantity.subunits = quantity.subunits *
-			pow10(currency.percision-quantity.percision)
+			pow10(currency.precision-quantity.precision)
 	}
 
-	quantity.percision = currency.percision
+	quantity.precision = currency.precision
 
 	return Amount{
 		quantity: quantity,
@@ -34,7 +34,7 @@ func (a *Amount) validate() error {
 	switch {
 	case a.quantity.subunits > maxDecimal:
 		return ErrTooLarge
-	case a.quantity.percision > a.currency.percision:
+	case a.quantity.precision > a.currency.precision:
 		return fmt.Errorf("%w: too percise", ErrIncompatibleDeciCurr)
 	}
 

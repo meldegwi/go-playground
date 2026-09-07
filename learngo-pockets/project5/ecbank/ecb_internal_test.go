@@ -9,7 +9,7 @@ import (
 	"moneyconverter/money"
 )
 
-func TestEuroCenteralBank_FetchExchangeRate_Sucess(t *testing.T) {
+func TestEuroCenteralBank_FetchExchangeRate_Success(t *testing.T) {
 	tServer := httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			mockXML := `<?xml version="1.0" encoding="UTF-8"?>

@@ -9,7 +9,7 @@ const (
 // Currency defines code of the currency.
 type Currency struct {
 	code      string
-	percision byte
+	precision byte
 }
 
 func ParseCurrency(code string) (Currency, error) {
@@ -37,7 +37,7 @@ func ParseCurrency(code string) (Currency, error) {
 
 	return Currency{
 		code:      code,
-		percision: perc,
+		precision: perc,
 	}, nil
 }
 

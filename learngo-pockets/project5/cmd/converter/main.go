@@ -28,7 +28,7 @@ func main() {
 
 	value := flag.Arg(0)
 	if value == "" {
-		fmt.Fprintf(os.Stderr, "mising amount to convert\n")
+		fmt.Fprintf(os.Stderr, "missing amount to convert\n")
 		flag.Usage()
 		os.Exit(1)
 	}

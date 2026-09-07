@@ -25,13 +25,13 @@ func applyExchangeRate(a Amount, target Currency, xr ExchangeRate) Amount {
 	}
 
 	switch {
-	case converted.percision > target.percision:
-		converted.subunits = converted.subunits / pow10(converted.percision-target.percision)
-	case converted.percision < target.percision:
-		converted.subunits = converted.subunits * pow10(target.percision-converted.percision)
+	case converted.precision > target.precision:
+		converted.subunits = converted.subunits / pow10(converted.precision-target.precision)
+	case converted.precision < target.precision:
+		converted.subunits = converted.subunits * pow10(target.precision-converted.precision)
 	}
 
-	converted.percision = target.percision
+	converted.precision = target.precision
 
 	return Amount{
 		quantity: converted,
@@ -42,7 +42,7 @@ func applyExchangeRate(a Amount, target Currency, xr ExchangeRate) Amount {
 func multiply(d Decimal, xr ExchangeRate) (Decimal, error) {
 	dec := Decimal{
 		subunits:  d.subunits * xr.subunits,
-		percision: d.percision + xr.percision,
+		precision: d.precision + xr.precision,
 	}
 
 	// dec.Simplify()
@@ -53,6 +53,6 @@ func multiply(d Decimal, xr ExchangeRate) (Decimal, error) {
 func (xr ExchangeRate) Divide(xRate ExchangeRate) ExchangeRate {
 	dec1 := Decimal(xr)
 	dec2 := Decimal(xRate)
-	res := dec1.Devide(dec2)
+	res := dec1.Divide(dec2)
 	return ExchangeRate(res)
 }

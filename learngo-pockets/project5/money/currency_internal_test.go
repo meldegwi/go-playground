@@ -16,7 +16,7 @@ func TestParseCurrency(t *testing.T) {
 			code: "EGP",
 			curr: Currency{
 				code:      "EGP",
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},
@@ -85,7 +85,7 @@ func TestParseCurrency(t *testing.T) {
 			code: "USD",
 			curr: Currency{
 				code:      "USD",
-				percision: 2,
+				precision: 2,
 			},
 			wantErr: nil,
 		},

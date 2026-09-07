@@ -127,7 +127,7 @@ func TestParseDecimal(t *testing.T) {
 	}
 }
 
-func TestDevideDecimal(t *testing.T) {
+func TestDivideDecimal(t *testing.T) {
 	tests := []struct {
 		name string
 		dec1 Decimal

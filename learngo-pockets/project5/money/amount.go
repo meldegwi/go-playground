@@ -3,7 +3,7 @@ package money
 import "fmt"
 
 const (
-	ErrIncompatibleDeciCurr = Error("Decimal percision and Currency percision are not compatible")
+	ErrIncompatibleDeciCurr = Error("Decimal precision and Currency precision are not compatible")
 )
 
 type Amount struct {
@@ -35,7 +35,7 @@ func (a *Amount) validate() error {
 	case a.quantity.subunits > maxDecimal:
 		return ErrTooLarge
 	case a.quantity.precision > a.currency.precision:
-		return fmt.Errorf("%w: too percise", ErrIncompatibleDeciCurr)
+		return fmt.Errorf("%w: too precise", ErrIncompatibleDeciCurr)
 	}
 
 	return nil

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Cache is a gerneric cache, its key can be any comparale value and the attached,
+// Cache is a generic cache, its key can be any comparale value and the attached,
 // value can be anything.
 type Cache[K comparable, V any] struct {
 	ttl time.Duration

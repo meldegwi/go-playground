@@ -54,7 +54,7 @@ func (c *Cache[K, V]) Read(key K) (V, bool) {
 }
 
 // Upsert overrides the value for a given key.
-func (c *Cache[K, V]) Upsert(key K, value V) error {
+func (c *Cache[K, V]) Upsert(key K, value V) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -68,8 +68,6 @@ func (c *Cache[K, V]) Upsert(key K, value V) error {
 	}
 
 	c.addKeyValue(key, value)
-
-	return nil
 }
 
 // Delete removes the entry of a given key.

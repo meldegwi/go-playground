@@ -12,7 +12,7 @@ import (
 )
 
 func TestCache_Parallel_Goroutines(t *testing.T) {
-	c := cache.New[int, string](time.Millisecond * 100)
+	c := cache.New[int, string](5, time.Millisecond*100)
 
 	const parallelTasks = 10
 
@@ -28,7 +28,7 @@ func TestCache_Parallel_Goroutines(t *testing.T) {
 }
 
 func TestCache_Parallel(t *testing.T) {
-	c := cache.New[int, string](time.Millisecond * 100)
+	c := cache.New[int, string](5, time.Millisecond*100)
 
 	t.Run("write six", func(t *testing.T) {
 		t.Parallel()
@@ -44,7 +44,7 @@ func TestCache_Parallel(t *testing.T) {
 func TestCache_TTL(t *testing.T) {
 	t.Parallel()
 
-	c := cache.New[string, string](time.Millisecond * 100)
+	c := cache.New[string, string](5, time.Millisecond*100)
 
 	c.Upsert("Egyptian", "Red")
 

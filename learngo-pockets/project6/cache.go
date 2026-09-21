@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"slices"
 	"sync"
 	"time"
 )
@@ -8,9 +9,13 @@ import (
 // Cache is a gerneric cache, its key can be any comparale value and the attached,
 // value can be anything.
 type Cache[K comparable, V any] struct {
-	ttl  time.Duration
+	ttl time.Duration
+
 	mu   sync.Mutex
 	data map[K]EntryWithTimeout[V]
+
+	mxSize            int
+	chronologicalKeys []K
 }
 
 type EntryWithTimeout[V any] struct {
@@ -19,10 +24,12 @@ type EntryWithTimeout[V any] struct {
 }
 
 // New makes a new instance of the Cache struct.
-func New[K comparable, V any](ttl time.Duration) Cache[K, V] {
+func New[K comparable, V any](cacheSize int, ttl time.Duration) Cache[K, V] {
 	return Cache[K, V]{
-		ttl:  ttl,
-		data: make(map[K]EntryWithTimeout[V]),
+		ttl:               ttl,
+		data:              make(map[K]EntryWithTimeout[V]),
+		mxSize:            cacheSize,
+		chronologicalKeys: make([]K, 0, cacheSize),
 	}
 }
 
@@ -39,7 +46,7 @@ func (c *Cache[K, V]) Read(key K) (V, bool) {
 	case !ok:
 		return zeroV, false
 	case e.expires.Before(time.Now()):
-		delete(c.data, key)
+		c.deleteKeyValue(key)
 		return zeroV, false
 	default:
 		return e.value, true
@@ -51,10 +58,16 @@ func (c *Cache[K, V]) Upsert(key K, value V) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	c.data[key] = EntryWithTimeout[V]{
-		value:   value,
-		expires: time.Now().Add(c.ttl),
+	_, valueFound := c.data[key]
+
+	switch {
+	case valueFound:
+		c.deleteKeyValue(key)
+	case len(c.data) == c.mxSize:
+		c.deleteKeyValue(c.chronologicalKeys[0])
 	}
+
+	c.addKeyValue(key, value)
 
 	return nil
 }
@@ -63,6 +76,27 @@ func (c *Cache[K, V]) Upsert(key K, value V) error {
 func (c *Cache[K, V]) Delete(key K) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
+
+	c.deleteKeyValue(key)
+}
+
+// addKeyValue inserts a key and its value into the cache.
+func (c *Cache[K, V]) addKeyValue(key K, value V) {
+	c.data[key] = EntryWithTimeout[V]{
+		value:   value,
+		expires: time.Now().Add(c.ttl),
+	}
+
+	c.chronologicalKeys = append(c.chronologicalKeys, key)
+}
+
+// deleteKeyValue removes a key and its value from the cache.
+func (c *Cache[K, V]) deleteKeyValue(key K) {
+	c.chronologicalKeys = slices.DeleteFunc(
+		c.chronologicalKeys,
+		func(k K) bool {
+			return k == key
+		})
 
 	delete(c.data, key)
 }
